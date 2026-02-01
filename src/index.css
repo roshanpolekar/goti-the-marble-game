@@ -1,0 +1,323 @@
+/* Goti - Traditional Indian Marble Game */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --color-bg: #3d2f1f;
+  --color-bg-secondary: #4a3c2a;
+  --color-accent: #daa520;
+  --color-accent-light: #f4d03f;
+  --color-success: #5cb85c;
+  --color-warning: #f0ad4e;
+  --color-danger: #d9534f;
+  --color-text: #f5f0e6;
+  --color-text-muted: #c4b8a0;
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  background: linear-gradient(135deg, #2d1f0f 0%, #3d2f1f 50%, #4a3a25 100%);
+  color: var(--color-text);
+  touch-action: none;
+  /* Prevent zooming */
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(74, 60, 42, 0.9);
+  border: 2px solid rgba(218, 165, 32, 0.3);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.title-accent {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-accent);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.05em;
+}
+
+.title-sub {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.day-badge {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  background: rgba(218, 165, 32, 0.2);
+  border: 1px solid var(--color-accent);
+  border-radius: 20px;
+  color: var(--color-accent);
+}
+
+.header-right {
+  display: flex;
+  gap: 16px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.score-value {
+  color: var(--color-accent-light);
+  text-shadow: 0 0 10px rgba(218, 165, 32, 0.5);
+}
+
+.streak {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.streak-value {
+  color: var(--color-warning);
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Game Container */
+.game-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* Stack board and instructions vertically */
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  min-height: 0;
+}
+
+.game-board {
+  filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.4));
+  border-radius: 15px;
+}
+
+/* Game Over Overlay */
+.game-over-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(45, 31, 15, 0.95);
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.3s ease;
+  z-index: 100;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.game-over-modal {
+  text-align: center;
+  padding: 32px 40px;
+  background: var(--color-bg-secondary);
+  border: 3px solid var(--color-accent);
+  border-radius: 16px;
+  box-shadow: 0 0 40px rgba(218, 165, 32, 0.3);
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.game-over-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: var(--color-accent-light);
+}
+
+.game-over-stats {
+  margin-bottom: 24px;
+}
+
+.final-score {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.final-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.final-value {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--color-accent-light);
+  text-shadow: 0 0 20px rgba(218, 165, 32, 0.5);
+}
+
+.final-shots {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.play-again-btn {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 12px 32px;
+  background: linear-gradient(135deg, var(--color-accent) 0%, #b8860b 100%);
+  border: none;
+  border-radius: 8px;
+  color: #1a1005;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.play-again-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(218, 165, 32, 0.5);
+}
+
+.share-hint {
+  margin-top: 16px;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* Instructions Footer */
+.instructions {
+  text-align: center;
+  padding: 12px;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.instructions p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.animating {
+  color: var(--color-accent);
+  animation: blink 0.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .header {
+    padding: 8px 12px;
+  }
+
+  .title-accent {
+    font-size: 1.4rem;
+  }
+
+  .stat-value {
+    font-size: 1.1rem;
+  }
+
+  .header-right {
+    gap: 12px;
+  }
+}
