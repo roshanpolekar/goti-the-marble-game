@@ -63,6 +63,7 @@ export interface SimulationResult {
 }
 
 export interface LevelConfig {
+    objective?: 'KNOCK_OUT' | 'KNOCK_IN'; // Default to KNOCK_OUT
     holes: Hole[];
     walls: Wall[];
     frictionZones: FrictionZone[];

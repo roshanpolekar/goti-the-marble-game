@@ -67,6 +67,7 @@ const GameInstance = ({
                         <option value={3}>Stage 3</option>
                         <option value={4}>Stage 4</option>
                         <option value={5}>Stage 5</option>
+                        <option value={6}>Stage 6 (Inverted)</option>
                     </select>
                 </div>
                 <div className="header-right">
@@ -140,7 +141,10 @@ const GameInstance = ({
                 {/* Instructions */}
                 <footer className="instructions">
                     {phase === 'AIMING' && !isGameOver && (
-                        <p>🎯 Flick marbles OUT of the ring(s) to collect them! ({marblesCollected}/{totalMarbles})</p>
+                        <p>🎯 {level.objective === 'KNOCK_IN'
+                            ? `Flick marbles INTO the ring! (${marblesCollected}/${totalMarbles})`
+                            : `Flick marbles OUT of the ring(s)! (${marblesCollected}/${totalMarbles})`
+                        }</p>
                     )}
                     {isAnimating && (
                         <p className="animating">Marbles rolling...</p>
@@ -159,7 +163,7 @@ function App() {
     const dayNumber = getDayNumber();
 
     const handleStageComplete = () => {
-        if (stage < 5) {
+        if (stage < 6) {
             // Create new stage
             setStage(prev => prev + 1);
         } else {

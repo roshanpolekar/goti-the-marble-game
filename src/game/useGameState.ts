@@ -74,7 +74,8 @@ export function useGameState(level: LevelConfig) {
                 level.frictionZones,
                 level.boardWidth,
                 level.boardHeight,
-                level.rings // Pass configured rings
+                level.rings, // Pass configured rings
+                level.objective // Pass objective
             );
 
             frameIndexRef.current = 0;

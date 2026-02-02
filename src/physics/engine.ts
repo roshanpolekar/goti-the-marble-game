@@ -164,7 +164,8 @@ export function simulateShot(
     _frictionZones: FrictionZone[],
     boardWidth: number,
     boardHeight: number,
-    rings: { x: number, y: number, radius: number }[] = [] // New rings param
+    rings: { x: number, y: number, radius: number }[] = [], // New rings param
+    objective: 'KNOCK_OUT' | 'KNOCK_IN' = 'KNOCK_OUT'
 ): SimulationResult {
     // Initialize simulation state
     const marbles: Marble[] = [
@@ -241,20 +242,39 @@ export function simulateShot(
             if (marble.potted) continue;
 
             // Check if TARGET marble knocked out of ALL rings
-            if (marble.type === 'TARGET' && !exitedThisShot.has(marble.id)) {
+            // Objective logic
+            if (objective === 'KNOCK_OUT') {
                 // Must be outside ALL rings to be considered "out"
-                if (isOutsideAllRings(marble, rings)) {
-                    exitedThisShot.add(marble.id);
+                if (marble.type === 'TARGET' && !exitedThisShot.has(marble.id)) {
+                    if (isOutsideAllRings(marble, rings)) {
+                        exitedThisShot.add(marble.id);
+                    }
                 }
+            } else {
+                // KNOCK_IN: Marble needs to be INSIDE any ring to score
+                // We don't track "exited", we track "entered" basically.
+                // But for scoring, we just check stopped position.
             }
 
             // Mark as collected only when stopped outside ring
-            if (marble.type === 'TARGET' && exitedThisShot.has(marble.id)) {
+            // Mark as collected only when stopped
+            if (marble.type === 'TARGET') {
                 const speed = Math.sqrt(marble.vx * marble.vx + marble.vy * marble.vy);
-                if (speed < 0.3 && isOutsideAllRings(marble, rings)) {
-                    marble.potted = true;
-                    pottedThisFrame.push(marble.id);
-                    pottedMarbles.push(marble.id);
+                if (speed < 0.3) {
+                    if (objective === 'KNOCK_OUT') {
+                        if (exitedThisShot.has(marble.id) && isOutsideAllRings(marble, rings)) {
+                            marble.potted = true;
+                            pottedThisFrame.push(marble.id);
+                            pottedMarbles.push(marble.id);
+                        }
+                    } else {
+                        // KNOCK_IN
+                        if (!isOutsideAllRings(marble, rings)) {
+                            marble.potted = true;
+                            pottedThisFrame.push(marble.id);
+                            pottedMarbles.push(marble.id);
+                        }
+                    }
                 }
             }
         }

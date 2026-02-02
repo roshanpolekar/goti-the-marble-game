@@ -213,6 +213,47 @@ export function generateLevel(stage: number = 1): LevelConfig {
                 potted: false,
             });
         }
+    } else if (stage === 6) {
+        // --- STAGE 6: INVERTED (Knock In) ---
+        // Small central ring, marbles OUTSIDE
+        const smallRingRadius = 60;
+        const mainRing = { x: RING_CENTER_X, y: RING_CENTER_Y, radius: smallRingRadius };
+        rings.push(mainRing);
+
+        // Spawn marbles in a donut shape outside the ring
+        const numMarbles = 20;
+        const minSpawnRadius = smallRingRadius + 50;
+        const maxSpawnRadius = smallRingRadius + 120;
+
+        for (let i = 0; i < numMarbles; i++) {
+            const range = Math.sqrt(random()) * (maxSpawnRadius - minSpawnRadius) + minSpawnRadius;
+            const theta = random() * Math.PI * 2;
+            const x = RING_CENTER_X + Math.cos(theta) * range;
+            const y = RING_CENTER_Y + Math.sin(theta) * range;
+
+            targetMarbles.push({
+                id: `marble-${i}`,
+                x, y, vx: 0, vy: 0,
+                radius: MARBLE_RADIUS,
+                mass: 0.8,
+                type: 'TARGET',
+                color: MARBLE_COLORS[i % MARBLE_COLORS.length],
+                potted: false,
+            });
+        }
+
+        return {
+            holes,
+            walls,
+            frictionZones,
+            targetMarbles,
+            strikerStart: { x: BOARD_WIDTH / 2, y: BOARD_HEIGHT - 100 },
+            boardWidth: BOARD_WIDTH,
+            boardHeight: BOARD_HEIGHT,
+            rings,
+            objective: 'KNOCK_IN'
+        };
+
     } else {
         // --- STAGE 1: SINGLE RING (Random Pattern) ---
         // Standard Single Circle
